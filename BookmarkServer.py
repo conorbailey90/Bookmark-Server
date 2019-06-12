@@ -68,15 +68,17 @@ class Shortener(http.server.BaseHTTPRequestHandler):
             self.send_header('Content-type', 'text/html')
             self.end_headers()
             # List the known associations in the form.
-            known = "\n".join("{} : {}".format(key, memory[key])
-                              for key in sorted(memory.keys()))
+            known = "\n".join("{} : {}".format(key, memory[key]) for key in sorted(memory.keys()))
             self.wfile.write(form.format(known).encode())
+
+           
 
     def do_POST(self):
         # Decode the form data.
         length = int(self.headers.get('Content-length', 0))
         body = self.rfile.read(length).decode()
         params = parse_qs(body)
+
 
         # Check that the user submitted the form fields.
         if "longuri" not in params or "shortname" not in params:
@@ -88,6 +90,8 @@ class Shortener(http.server.BaseHTTPRequestHandler):
 
         longuri = params["longuri"][0]
         shortname = params["shortname"][0]
+
+    
 
         if CheckURI(longuri):
             # This URI is good!  Remember it under the specified name.
